@@ -79,13 +79,6 @@ Abra o arquivo `estrutura_banco_usmg.sql` no DBeaver e execute o script completo
 > após a criação das tabelas, com regras de integridade referencial definidas
 > (`ON DELETE` / `ON UPDATE`).
 
-## 👥 Equipe
-
-Projeto desenvolvido em grupo:
-
-- **Matheus Zanin** — modelagem do DER e apresentação
-- **Breno**
-- **Kaique**
 
 ## 👤 Autor
 
