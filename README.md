@@ -14,29 +14,35 @@
 Projeto acadêmico desenvolvido na disciplina de Banco de Dados. O objetivo foi
 modelar e implementar, do zero, um banco de dados capaz de gerenciar a realização
 de eventos acadêmicos — desde o cadastro do evento e suas atividades até a
-inscrição dos participantes, o controle de presença e a emissão de certificados.
+inscrição dos participantes, o controle de presença (check-in) e a emissão de
+certificados.
 
 O trabalho cobre o ciclo completo: **modelagem conceitual (DER)** → **modelo
-lógico** → **implementação física em SQL** (criação de tabelas, chaves estrangeiras,
-ordem de inserção e consultas).
+lógico** → **implementação física em SQL** (criação de tabelas, chaves
+estrangeiras com regras de integridade referencial).
 
 ## 🗂️ Modelagem (DER)
 
-O modelo é composto por **6 entidades principais** e **1 entidade associativa**:
+O modelo é composto por **6 entidades principais** e **2 entidades associativas**:
 
-| Entidade        | Descrição                                              |
-|-----------------|--------------------------------------------------------|
-| **Evento**      | O evento acadêmico em si (nome, data, descrição)       |
-| **Atividade**   | Palestras, workshops e demais atividades de um evento  |
-| **Participante**| Pessoa inscrita no evento                              |
-| **Staff**       | Equipe responsável pela organização e atuação          |
-| **Local**       | Espaço físico onde ocorrem as atividades               |
-| **Certificado** | Documento emitido ao participante                      |
-| **Inscrição** ⭐ | Entidade associativa que liga Participante e Evento     |
+| Entidade                        | Descrição                                                          |
+|---------------------------------|--------------------------------------------------------------------|
+| **Evento**                      | O evento acadêmico (data, horário e vagas totais)                  |
+| **Atividade**                   | Palestras, workshops etc., vinculadas a um evento e a um local     |
+| **Participante**                | Pessoa que se inscreve nas atividades (identificada pelo CPF)      |
+| **Staff**                       | Equipe responsável pela organização e atuação                     |
+| **Local**                       | Espaço físico (bloco, sala e capacidade máxima)                    |
+| **Certificado**                 | Documento emitido a partir de uma inscrição                        |
+| **Inscrição** ⭐ (associativa)   | Liga Participante e Atividade; registra check-in e status de presença |
+| **Atuação do Staff** ⭐ (associativa) | Liga Staff e Atividade                                        |
 
-A entidade **Inscrição** resolve o relacionamento N:N entre Participante e Evento,
-permitindo que um participante se inscreva em vários eventos e que um evento
-tenha vários participantes.
+**Relacionamentos principais:**
+
+- Uma **Atividade** pertence a um **Evento** e ocorre em um **Local**.
+- A **Inscrição** resolve o relacionamento N:N entre **Participante** e **Atividade**,
+  guardando a data de check-in e o status de presença.
+- O **Certificado** é gerado a partir de uma **Inscrição**.
+- A **Atuação do Staff** resolve o relacionamento N:N entre **Staff** e **Atividade**.
 
 <!-- Salve a imagem do DER em /docs e descomente a linha abaixo -->
 <!-- ![Diagrama Entidade-Relacionamento](docs/der.png) -->
@@ -45,28 +51,19 @@ tenha vários participantes.
 
 - **MySQL** — sistema gerenciador de banco de dados
 - **DBeaver** — ferramenta de modelagem e execução de queries
-- **SQL** — DDL e DML (CREATE, INSERT, SELECT, constraints)
+- **SQL** — DDL (CREATE, ALTER, constraints) com regras de `ON DELETE` / `ON UPDATE`
 
 ## 📁 Estrutura do repositório
+
+```
 usmg-gestao-eventos/
-
-├── sql/
-
-│   ├── 01_create_tables.sql    # Criação das tabelas e chaves estrangeiras
-
-│   └── 02_inserts.sql          # Inserção dos dados (na ordem correta de FK)
-
-├── docs/
-
-│   └── der.png                 # Diagrama Entidade-Relacionamento
-
+├── estrutura_banco_usmg.sql   # Script completo: DROP + CREATE + chaves estrangeiras
 └── README.md
-
-<!-- ajuste os nomes dos arquivos conforme o seu repo -->
+```
 
 ## ▶️ Como executar
 
-Pré-requisito: ter o **MySQL** instalado (ou usar o DBeaver conectado a um servidor MySQL).
+Pré-requisito: ter o **MySQL** instalado (ou usar o **DBeaver** conectado a um servidor MySQL).
 
 ```bash
 # Clone o repositório
@@ -74,15 +71,21 @@ git clone https://github.com/Zanin777/usmg-gestao-eventos.git
 cd usmg-gestao-eventos
 ```
 
-Depois, execute os scripts **nesta ordem** (a ordem importa por causa das chaves estrangeiras):
+Abra o arquivo `estrutura_banco_usmg.sql` no DBeaver e execute o script completo.
 
-1. `sql/01_create_tables.sql` — cria a estrutura
-2. `sql/02_inserts.sql` — popula os dados
+> 💡 O script começa removendo as tabelas (`DROP TABLE`) na ordem inversa das
+> chaves estrangeiras, então pode ser reexecutado quantas vezes for preciso
+> sem dar erro de FK. As chaves estrangeiras são criadas via `ALTER TABLE`
+> após a criação das tabelas, com regras de integridade referencial definidas
+> (`ON DELETE` / `ON UPDATE`).
 
-> 💡 As inserções seguem a ordem das dependências: primeiro as entidades
-> independentes (Local, Evento), depois as que dependem delas, e por último a
-> tabela associativa (Inscrição).
+## 👥 Equipe
 
+Projeto desenvolvido em grupo:
+
+- **Matheus Zanin** — modelagem do DER e apresentação
+- **Breno**
+- **Kaique**
 
 ## 👤 Autor
 
