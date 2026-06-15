@@ -48,3 +48,42 @@ tenha vários participantes.
 - **SQL** — DDL e DML (CREATE, INSERT, SELECT, constraints)
 
 ## 📁 Estrutura do repositório
+usmg-gestao-eventos/
+
+├── sql/
+
+│   ├── 01_create_tables.sql    # Criação das tabelas e chaves estrangeiras
+
+│   └── 02_inserts.sql          # Inserção dos dados (na ordem correta de FK)
+
+├── docs/
+
+│   └── der.png                 # Diagrama Entidade-Relacionamento
+
+└── README.md
+
+<!-- ajuste os nomes dos arquivos conforme o seu repo -->
+
+## ▶️ Como executar
+
+Pré-requisito: ter o **MySQL** instalado (ou usar o DBeaver conectado a um servidor MySQL).
+
+```bash
+# Clone o repositório
+git clone https://github.com/Zanin777/usmg-gestao-eventos.git
+cd usmg-gestao-eventos
+```
+
+Depois, execute os scripts **nesta ordem** (a ordem importa por causa das chaves estrangeiras):
+
+1. `sql/01_create_tables.sql` — cria a estrutura
+2. `sql/02_inserts.sql` — popula os dados
+
+> 💡 As inserções seguem a ordem das dependências: primeiro as entidades
+> independentes (Local, Evento), depois as que dependem delas, e por último a
+> tabela associativa (Inscrição).
+
+
+## 👤 Autor
+
+[![GitHub](https://img.shields.io/badge/GitHub-Zanin777-181717?style=flat&logo=github)](https://github.com/Zanin777)
